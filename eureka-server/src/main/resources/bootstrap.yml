@@ -1,0 +1,13 @@
+server:
+  port: 2001
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://localhost:2001/eureka/

@@ -1,0 +1,29 @@
+server:
+  port: 2002
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///D:/project/monitor/config-server/src/main/resources/config
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:2001/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'
