@@ -1,0 +1,92 @@
+server:
+  port: 3001
+
+spring:
+  application:
+    name: gamma-monitor #服务名称
+  cloud:
+    config:
+      discovery:
+        enabled: true # 通过服务发现的方式去找配置中心
+        service-id: config-server # 配置中心的名字，直接配置名称可以在配置中心集群的时候实现负载均衡
+      profile: dev # 对应配置中心文件的${profile}部分
+  rabbitmq: #rabbitmq相关配置
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  datasource:
+    username: ${mysql.gamma-monitor.username}
+    password: ${mysql.gamma-monitor.password}
+    url: jdbc:mysql://${mysql.gamma-monitor.host}:${mysql.gamma-monitor.port}/${mysql.gamma-monitor.database}?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  redis:
+    host: ${windows-docker.host}
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-wait: 2000
+        max-idle: 10
+  mvc:
+    async:
+      request-timeout: 20000
+
+mysql.gamma-monitor:
+  host: ${windows.host}
+  port: 3306
+  database: gamma_monitor
+  username: root
+  password: 123456
+
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.example.entity
+
+influxdb:
+  host: ${windows-docker.host}
+  port: 8086
+  user: admin
+  password: admin
+  db: gamma_monitor
+  measurement: gamma
+  url: http://${influxdb.host}:${influxdb.port}
+
+admin:
+  username: admin
+  password: 12345
+
+netty:
+  tcp:
+    server:
+      host: 192.168.10.5
+      port: 4001
+
+async:
+  core-pool-size: 10
+  max-pool-size: 200
+  queue-capacity: 10
+
+windows-docker.host: localhost
+windows.host: localhost
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:2001/eureka/ #配置注册中心地址
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'refresh'
+
+feign:
+  hystrix:
+    enabled: true
+
+logging:
+  level:
+    com.*: debug

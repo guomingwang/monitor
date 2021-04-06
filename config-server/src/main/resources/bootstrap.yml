@@ -4,13 +4,21 @@ server:
 spring:
   application:
     name: config-server
-  profiles:
-    active: native
   cloud:
     config:
       server:
-        native:
-          search-locations: file:///D:/project/monitor/config-server/src/main/resources/config
+        git: #配置存储配置信息的Git仓库
+          uri: https://gitee.com/wangguoming/monitor-config-server.git
+          username: wangguoming
+          password: wgm123456
+          clone-on-start: true #开启启动时直接从git获取配置
+#  profiles:
+#    active: native
+#  cloud:
+#    config:
+#      server:
+#        native:
+#          search-locations: file:///D:/project/monitor/config-server/src/main/resources/config
   rabbitmq:
     host: localhost
     port: 5672
@@ -26,4 +34,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: 'bus-refresh'
+        include: 'bus-refresh' # 刷新配置文件 POST http://localhost:2002/actuator/bus-refresh
