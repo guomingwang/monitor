@@ -10,10 +10,10 @@ spring:
           enabled: true #开启从注册中心动态创建路由的功能
           lower-case-service-id: true #使用小写服务名，默认是大写
       routes:
-        - id: gateway
-          uri: lb://gateway
+        - id: security
+          uri: lb://security
           predicates:
-            - Path=/gateway/**
+            - Path=/security/**
           filters:
             - StripPrefix=1
         - id: gamma-monitor
@@ -22,6 +22,24 @@ spring:
             - Path=/gamma-monitor/**
           filters:
             - StripPrefix=1
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: 'http://localhost:2005/rsa/publicKey' #配置RSA的公钥访问地址
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+    key:
+      auth: AUTH
+
+secure:
+  ignore:
+    urls: #配置白名单路径
+      - "/actuator/**"
+      - "/security/oauth/token"
 
 eureka:
   client:

@@ -1,0 +1,28 @@
+server:
+  port: 3002
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2-CLIENT-SESSIONID #防止Cookie冲突，冲突会导致登录验证不通过
+
+spring:
+  application:
+    name: oauth2-client
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:2001/eureka/
+
+oauth2-server-url: http://localhost:2003
+
+security:
+  oauth2: #与oauth2-server对应的配置
+    client:
+      client-id: admin
+      client-secret: admin123456
+      user-authorization-uri: ${oauth2-server-url}/oauth/authorize
+      access-token-uri: ${oauth2-server-url}/oauth/token
+    resource:
+      jwt:
+        key-uri: ${oauth2-server-url}/oauth/token_key
